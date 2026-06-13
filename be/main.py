@@ -30,10 +30,11 @@ client = genai.Client(api_key=GEMINI_API_KEY)
 
 app = FastAPI(title="Roast My Resume Backend")
 
-# Enable CORS for Next.js dev server on localhost:3000
+# Enable CORS
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Adjust in production to allow only frontend origin
+    allow_origins=[FRONTEND_URL, "http://localhost:3000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
