@@ -43,7 +43,7 @@ export default function LandingPage() {
 
   const uploadRef = useRef<HTMLDivElement>(null);
 
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://roastmyresume-nw4b.onrender.com";
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
