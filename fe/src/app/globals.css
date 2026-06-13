@@ -1,0 +1,174 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ─── Custom Font Utilities ────────────────────────────────────────────────── */
+.font-sans {
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+.font-display {
+  font-family: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ─── Design Tokens ────────────────────────────────────────────────────────── */
+:root {
+  --bg:           #050505;
+  --surface:      #0D1018;
+  --surface-sec:  #111827;
+  --card:         #0F1320;
+  --border:       rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(255, 255, 255, 0.15);
+  
+  --text:         #FFFFFF;
+  --text-2:       #A1A1AA;
+  --text-3:       #71717A;
+
+  --accent:       #8B5CF6;
+  --accent-secondary: #A855F7;
+  --accent-tertiary: #6366F1;
+  --accent-hover: #A78BFA;
+  --blue:         #3B82F6;
+  --cyan:         #06B6D4;
+  --pink:         #EC4899;
+  --red:          #EF4444;
+  --green:        #10B981;
+  --orange:       #F59E0B;
+}
+
+/* ─── Scrollbars ────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border-hover); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
+
+/* ─── Base ─────────────────────────────────────────────────────────────────── */
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: rgba(139, 92, 246, 0.25);
+  color: var(--text);
+}
+
+/* ─── Typography ───────────────────────────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text);
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+/* ─── Card ─────────────────────────────────────────────────────────────────── */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.25s ease;
+}
+
+.card:hover {
+  border-color: var(--border-hover);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2), 0 0 16px rgba(255, 255, 255, 0.02);
+  transform: translateY(-2px);
+}
+
+/* ─── Buttons ───────────────────────────────────────────────────────────────── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 16px;
+  background: linear-gradient(180deg, #A78BFA, #8B5CF6);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 10px rgba(139, 92, 246, 0.2);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(180deg, #C4B5FD, #A78BFA);
+  box-shadow: 0 4px 16px rgba(139, 92, 246, 0.4);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: translateY(1px);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 16px;
+  background: var(--surface-sec);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.btn-secondary:hover {
+  border-color: var(--border-hover);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ─── Tab indicator ─────────────────────────────────────────────────────────── */
+.tab-active-bar {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--accent);
+}
+
+/* ─── Animations ────────────────────────────────────────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -600px 0; }
+  100% { background-position: 600px 0; }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.02) 0%,
+    rgba(255, 255, 255, 0.06) 50%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  background-size: 600px 100%;
+  animation: shimmer 1.6s ease-in-out infinite;
+  border-radius: 8px;
+}
+
+@keyframes border-glow {
+  0%, 100% { 
+    border-color: rgba(139, 92, 246, 0.4); 
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.2), inset 0 0 20px rgba(139, 92, 246, 0.1); 
+  }
+  50% { 
+    border-color: rgba(168, 85, 247, 0.8); 
+    box-shadow: 0 0 30px rgba(168, 85, 247, 0.4), inset 0 0 30px rgba(168, 85, 247, 0.2); 
+  }
+}
+
+.animate-border-glow {
+  animation: border-glow 3s infinite ease-in-out;
+}
