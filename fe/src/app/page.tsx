@@ -43,7 +43,7 @@ export default function LandingPage() {
 
   const uploadRef = useRef<HTMLDivElement>(null);
 
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://roastmyresume-nw4b.onrender.com";
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -99,15 +99,17 @@ export default function LandingPage() {
     const formData = new FormData();
     formData.append("file", file);
 
+    const targetUrl = apiUrl.replace(/\/$/, "");
+
     try {
-      const response = await fetch(`${apiUrl}/roast-parallel`, {
+      const response = await fetch(`${targetUrl}/roast-parallel`, {
         method: "POST",
         body: formData,
       });
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        setError(errorData.detail || "Failed to process the resume. Is the API running?");
+        setError(errorData.detail || `Failed to process resume (Status: ${response.status})`);
         setUploadLoading(false);
         return;
       }
@@ -118,8 +120,8 @@ export default function LandingPage() {
 
       router.push("/results");
     } catch (err: any) {
-      console.error("Upload failed:", err);
-      setError(err.message || "An unexpected error occurred.");
+      console.warn("Upload connection issue:", err?.message || err);
+      setError(err?.message || "An unexpected network error occurred.");
       setUploadLoading(false);
     }
   };
@@ -244,7 +246,7 @@ export default function LandingPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="font-display font-bold text-5xl md:text-7xl leading-[1.1] mb-6 text-white tracking-tight"
+              className="font-display font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.1] mb-6 text-white tracking-tight"
             >
               Your Resume Has <br className="hidden md:block" />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#8B5CF6] via-[#A855F7] to-[#6366F1]">
@@ -256,7 +258,7 @@ export default function LandingPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-lg md:text-xl text-[var(--text-2)] max-w-xl mb-12"
+              className="text-base sm:text-lg md:text-xl text-[var(--text-2)] max-w-xl mb-10 md:mb-12"
             >
               Upload your resume and get a brutally honest recruiter-grade analysis, ATS review, and actionable fixes in under 30 seconds.
             </motion.p>
@@ -268,7 +270,7 @@ export default function LandingPage() {
               transition={{ duration: 0.5, delay: 0.3 }}
               className="flex flex-col items-center lg:items-start gap-3"
             >
-              <div className="flex gap-1 text-[#F59E0B]">
+              <div className="flex gap-1 text-[#F59E0B]" aria-label="5 star rating">
                 <Star className="w-5 h-5 fill-current" />
                 <Star className="w-5 h-5 fill-current" />
                 <Star className="w-5 h-5 fill-current" />
@@ -294,10 +296,11 @@ export default function LandingPage() {
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
               className={`
-                card p-14 text-center cursor-pointer transition-all duration-300 relative overflow-hidden group
+                card p-8 sm:p-10 md:p-12 text-center cursor-pointer transition-all duration-300 relative overflow-hidden group
                 ${isDragOver ? "bg-[rgba(139,92,246,0.08)] border-[#8B5CF6]" : "bg-[rgba(13,16,24,0.6)] backdrop-blur-xl border-[rgba(255,255,255,0.08)]"}
                 hover:bg-[rgba(139,92,246,0.03)]
                 animate-border-glow
+                focus-within:ring-2 focus-within:ring-[#8B5CF6] focus-within:ring-offset-2 focus-within:ring-offset-[#050505]
               `}
               style={{
                 borderRadius: '24px',
@@ -306,6 +309,7 @@ export default function LandingPage() {
               <input
                 id="resume-upload"
                 type="file"
+                aria-label="Upload your resume in PDF or DOCX format"
                 accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                 onChange={handleFileChange}
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
@@ -313,31 +317,31 @@ export default function LandingPage() {
 
               <div className="absolute inset-0 bg-gradient-to-b from-[rgba(139,92,246,0.05)] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
-              <div className="mb-6 w-20 h-20 mx-auto rounded-full flex items-center justify-center bg-[rgba(139,92,246,0.1)] border border-[rgba(139,92,246,0.2)] group-hover:border-[#8B5CF6] group-hover:scale-110 transition-all duration-300 shadow-[0_0_20px_rgba(139,92,246,0.2)]">
-                <Upload className="w-8 h-8 text-[#8B5CF6] group-hover:text-white transition-colors" />
+              <div className="mb-6 w-16 h-16 sm:w-20 sm:h-20 mx-auto rounded-full flex items-center justify-center bg-[rgba(139,92,246,0.1)] border border-[rgba(139,92,246,0.2)] group-hover:border-[#8B5CF6] group-hover:scale-110 transition-all duration-300 shadow-[0_0_20px_rgba(139,92,246,0.2)]">
+                <Upload className="w-7 h-7 sm:w-8 sm:h-8 text-[#8B5CF6] group-hover:text-white transition-colors" />
               </div>
 
-              <h3 className="text-2xl font-display font-semibold text-white mb-3">
+              <h3 className="text-xl sm:text-2xl font-display font-semibold text-white mb-3">
                 Drag & Drop Resume
               </h3>
 
               <div className="flex items-center justify-center gap-4 mb-6">
                 <span className="h-[1px] w-12 bg-[rgba(255,255,255,0.1)]"></span>
-                <span className="text-sm text-[var(--text-3)] font-medium">OR</span>
+                <span className="text-xs sm:text-sm text-[var(--text-3)] font-medium">OR</span>
                 <span className="h-[1px] w-12 bg-[rgba(255,255,255,0.1)]"></span>
               </div>
 
               <label
                 htmlFor="resume-upload"
-                className="btn-primary mb-6 pointer-events-none text-base px-8 py-3 h-auto"
+                className="btn-primary mb-6 text-sm sm:text-base px-6 py-2.5 sm:px-8 sm:py-3 h-auto shadow-md"
               >
                 Browse Files
               </label>
 
-              <div className="flex items-center justify-center gap-4 text-sm text-[var(--text-3)]">
-                <span className="flex items-center gap-1.5"><FileText className="w-4 h-4" /> PDF or DOCX</span>
-                <span className="w-1 h-1 rounded-full bg-[rgba(255,255,255,0.2)]"></span>
-                <span className="flex items-center gap-1.5"><Lock className="w-4 h-4" /> Your resume is never stored</span>
+              <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-xs sm:text-sm text-[var(--text-3)]">
+                <span className="flex items-center gap-1.5"><FileText className="w-4 h-4 text-[#8B5CF6]" /> PDF or DOCX</span>
+                <span className="hidden sm:inline-block w-1 h-1 rounded-full bg-[rgba(255,255,255,0.2)]"></span>
+                <span className="flex items-center gap-1.5"><Lock className="w-4 h-4 text-[#10B981]" /> Never stored</span>
               </div>
             </div>
 

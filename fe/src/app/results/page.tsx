@@ -111,7 +111,7 @@ export default function ResultsPage() {
 
 
 
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://roastmyresume-nw4b.onrender.com";
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
   useEffect(() => {
     let iv: NodeJS.Timeout;
@@ -261,27 +261,33 @@ export default function ResultsPage() {
       <main className="flex-grow w-[92%] max-w-[1400px] mx-auto py-12">
 
         {/* Result Header */}
-        <header className="flex items-center justify-between mb-8">
+        <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
            <div className="flex items-center gap-4">
             <button
               onClick={startOver}
-              className="flex items-center justify-center w-10 h-10 rounded-[12px] transition-all bg-[var(--surface-sec)] border border-[var(--border)] text-[var(--text-2)] hover:text-[var(--text)] hover:bg-[rgba(255,255,255,0.08)] hover:border-[var(--border-hover)]"
-              title="Back"
+              className="flex items-center justify-center w-10 h-10 rounded-[12px] transition-all bg-[var(--surface-sec)] border border-[var(--border)] text-[var(--text-2)] hover:text-[var(--text)] hover:bg-[rgba(255,255,255,0.08)] hover:border-[var(--border-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+              title="Back to Upload"
+              aria-label="Back to Upload"
             >
               <ArrowLeft className="w-4 h-4" />
             </button>
             <div>
-               <p className="text-[14px] font-medium text-[var(--text-3)] mb-1">{filename}</p>
-               <h1 className="font-display font-semibold text-[48px] text-[var(--text)] tracking-tight leading-none">
+               <p className="text-xs sm:text-sm font-medium text-[var(--text-3)] mb-1 flex items-center gap-2">
+                 <FileText className="w-3.5 h-3.5 text-[var(--accent)]" /> {filename}
+               </p>
+               <h1 className="font-display font-bold text-3xl sm:text-4xl md:text-[44px] text-[var(--text)] tracking-tight leading-tight">
                  Analysis Results
                </h1>
             </div>
            </div>
-
         </header>
 
         {/* Tabs */}
-        <div className="flex items-center gap-8 mb-10 border-b border-[var(--border)] relative">
+        <div 
+          role="tablist"
+          aria-label="Resume Review Navigation"
+          className="flex items-center gap-6 sm:gap-8 mb-10 border-b border-[var(--border)] relative overflow-x-auto no-scrollbar"
+        >
            {[
              { id: "report", label: "Resume Analysis", loading: roastLoading && !!roastData },
              { id: "changes", label: "Recommended Changes", loading: changesLoading }
@@ -290,12 +296,15 @@ export default function ResultsPage() {
              return (
                <button
                  key={tab.id}
+                 role="tab"
+                 aria-selected={isActive}
+                 aria-controls={`panel-${tab.id}`}
                  onClick={() => setActiveTab(tab.id as any)}
-                 className={`relative pb-4 text-[15px] font-semibold transition-colors ${isActive ? 'text-[var(--text)]' : 'text-[var(--text-2)] hover:text-[var(--text)]'}`}
+                 className={`relative pb-4 text-sm sm:text-[15px] font-semibold transition-colors shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] rounded-t-sm ${isActive ? 'text-[var(--text)]' : 'text-[var(--text-2)] hover:text-[var(--text)]'}`}
                >
                  {tab.loading ? (
                     <span className="flex items-center gap-2">
-                       <RefreshCw className="w-4 h-4 animate-spin" /> {tab.label}
+                       <RefreshCw className="w-4 h-4 animate-spin text-[var(--accent)]" /> {tab.label}
                     </span>
                  ) : (
                     tab.label
