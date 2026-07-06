@@ -1,4 +1,4 @@
-# Roast My Resume 🔥
+# Roast My Resume 
 
 An AI-powered resume roasting tool that delivers brutally honest, darkly humorous feedback on your resume — plus actionable professional improvements. Upload your resume and get a full recruiter-style audit with sharp commentary, meme one-liners, and concrete rewrite suggestions.
 
